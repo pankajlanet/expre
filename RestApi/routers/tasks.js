@@ -53,34 +53,6 @@ router.post("/tasks", async (req, res) => {
       });
   });
   
-  // patching the some details with existing user in database
-  router.patch("/users/:id", async (req, res) => {
-    const allowedUpdates = ["name", "email", "password", "age"]; // to validate so that these feilds can only be stored
-    const updates = Object.keys(req.body);
-  
-    const isItValid = updates.every((update) => {
-      return allowedUpdates.includes(update);
-    });
-  
-    if (!isItValid) {
-      return res.status(404).send("opeartion are not allowed to change");
-    }
-  
-    try {
-      const user = await Users.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      });
-      if (!user) {
-        return res.status(404).send("user is not present");
-      }
-  
-      res.send(user);
-    } catch (er) {
-      res.status(400);
-      res.send("internal servere error");
-    }
-  });
   
   // setting up a task update handle
   router.patch("/tasks/:id", async (req, res) => {
@@ -100,7 +72,7 @@ router.post("/tasks", async (req, res) => {
         runValidators: true,
       });
       if (!tasks) {
-        return res.status(400).send("user not present with this id ");
+        return res.status(400).send("task not present with this id ");
       }
       res.status(201);
       res.json(req.body);

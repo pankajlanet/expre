@@ -24,7 +24,7 @@ router.get("/users/:name", (req, res) => {
   // getting the user info by passing the additional info in body
   
   router.get("/users", (req, res) => {
-    Users.find({ email: req.body.email }).then((result) => {
+    Users.find({}).then((result) => {
       if (result.length === 0) {
         res.send({
           status: "person not present",
@@ -80,6 +80,40 @@ router.delete('/users/:id' ,(req,res) => {
   
   
   } )
+
+  // patching the some details with existing user in database
+  router.patch("/users/:id", async (req, res) => {
+    const allowedUpdates = ["name", "email", "password", "age"]; // to validate so that these feilds can only be stored
+    const updates = Object.keys(req.body);
+    
+    const isItValid = updates.every((update) => {
+      return allowedUpdates.includes(update);
+    });
+    if (!isItValid) {
+      return res.status(404).send("opeartion are not allowed to change");
+    }
+    
+   
+
+    try {
+      const user = await Users.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+      });
+      
+    
+      if (!user) {
+        return res.status(404).send("user is not present");
+      }
+  
+      res.send(user);
+    } catch (e) {
+      res.status(400).json({
+        err : e
+      });
+    }
+  });
+  
   
   
   
