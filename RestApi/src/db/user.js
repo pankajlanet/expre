@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const Users = mongoose.model("Users", {
+const userSchema = mongoose.Schema({
   name: {
     type: String,
     required: true,
@@ -26,6 +26,15 @@ const Users = mongoose.model("Users", {
   age: {
     type: String,
   },
-});
+})
+
+//must be used simple function to make bindings
+userSchema.pre ('save' , async function (next) {
+  const user = this
+  console.log("just before  save")
+  next()
+} )
+
+const Users = mongoose.model("Users",userSchema);
 
 module.exports = Users;

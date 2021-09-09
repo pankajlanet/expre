@@ -105,3 +105,23 @@ app.listen(port, () => {
 });
 
 
+const bcrypt = require('bcryptjs')
+
+const myFunction = async( )=> {
+  
+  try{
+    const password = 'password'
+  const hashPassword = await bcrypt.hash(password , 8);
+  console.log(hashPassword)
+  }
+  catch(e) {
+    console.log("error is : " , e)
+  }
+  
+
+} 
+
+myFunction()
+
+
+
