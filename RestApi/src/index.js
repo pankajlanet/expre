@@ -121,7 +121,17 @@ const myFunction = async( )=> {
 
 } 
 
-myFunction()
+const jwt = require('jsonwebtoken')
+
+myFunction();
+
+
+const anotherFunction  = async()=> {
+  const token = jwt.sign({'id' : 'test'} , 'another', {expiresIn : '0 seconds'}); // in third arguments we can set the expire tiem
+  console.log("token is : ", token)
+ console.log( jwt.verify(token,'another'))
+} 
+anotherFunction()
 
 
 

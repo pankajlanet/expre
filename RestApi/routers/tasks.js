@@ -56,6 +56,36 @@ router.post("/tasks", async (req, res) => {
   
   
   // setting up a task update handle
+  // router.patch("/tasks/:id", async (req, res) => {
+  //   const updates = Object.keys(req.body);
+  //   const list = ["description", "completed"];
+  //   const isValid = updates.every((update) => updates.includes(list));
+  
+  //   if (isValid) {
+  //     return res.send(
+  //       "please enter given fileds (description , completed status) only"
+  //     );
+  //   }
+  //   try {
+  
+  //     const tasks = await Tasks.findByIdAndUpdate(req.params.id, req.body, {
+  //       new: true,
+  //       runValidators: true,
+  //     });
+  //     if (!tasks) {
+  //       return res.status(400).send("task not present with this id ");
+  //     }
+  //     res.status(201);
+  //     res.json(req.body);
+  //   } catch (e) {
+  //     res.json({ err: e });
+  //   }
+  // });
+
+
+
+  //patching with little changes to bring middleware encryption process
+
   router.patch("/tasks/:id", async (req, res) => {
     const updates = Object.keys(req.body);
     const list = ["description", "completed"];
@@ -68,10 +98,13 @@ router.post("/tasks", async (req, res) => {
     }
     try {
   
-      const tasks = await Tasks.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      });
+      // const tasks = await Tasks.findByIdAndUpdate(req.params.id, req.body, {
+      //   new: true,
+      //   runValidators: true,
+      // });
+      const tasks = await Tasks.findById(req.params.id)
+      updates.forEach( update => tasks[update] === req.body[update] );
+      await tasks.save()
       if (!tasks) {
         return res.status(400).send("task not present with this id ");
       }
@@ -81,5 +114,6 @@ router.post("/tasks", async (req, res) => {
       res.json({ err: e });
     }
   });
+
 
   module.exports = router

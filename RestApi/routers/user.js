@@ -61,7 +61,7 @@ router.get("/users/:name", (req, res) => {
       });
   });
 
-  //deletig a user form the database endpoint
+  //deleting a user form the database endpoint
 router.delete('/users/:id' ,(req,res) => {
 
     Users.findByIdAndDelete(req.params.id).then( (user=> {
@@ -96,12 +96,16 @@ router.delete('/users/:id' ,(req,res) => {
    
 
     try {
-      const user = await Users.findByIdAndUpdate(req.params.id, req.body, {
-        new: true,
-        runValidators: true,
-      });
+      // const user = await Users.findByIdAndUpdate(req.params.id, req.body, {
+      //   new: true,
+      //   runValidators: true,
+      // });
+
+      const user = await Users.findById(req.params.id)
+      allowedUpdates.forEach( (update) => user[update] === req.body[update] )
+
+      user.save()
       
-    
       if (!user) {
         return res.status(404).send("user is not present");
       }
@@ -113,6 +117,21 @@ router.delete('/users/:id' ,(req,res) => {
       });
     }
   });
+
+
+  router.post('/users/login' , async(req,res)=> {
+
+    try{
+      const user = await Users.findByCredentials(req.body.email,req.body.password)
+      res.send(user)
+    }
+    catch(e){
+      res.status(400).send({
+        err : e
+      })
+    }
+
+  } )
   
   
   
