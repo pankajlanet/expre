@@ -24,7 +24,7 @@ router.get("/users/:name", (req, res) => {
   // getting the user info by passing the additional info in body
   
   router.get("/users", (req, res) => {
-    Users.find({}).then((result) => {
+    Users.find({ email: req.body.email }).then((result) => {
       if (result.length === 0) {
         res.send({
           status: "person not present",
@@ -80,7 +80,7 @@ router.delete('/users/:id' ,(req,res) => {
   
   
   } )
-
+  
   // patching the some details with existing user in database
   router.patch("/users/:id", async (req, res) => {
     const allowedUpdates = ["name", "email", "password", "age"]; // to validate so that these feilds can only be stored
@@ -113,8 +113,6 @@ router.delete('/users/:id' ,(req,res) => {
       });
     }
   });
-  
-  
   
   
   

@@ -1,6 +1,7 @@
 const express = require('express')
 const router = new express.Router()
 const Tasks = require("../src/db/tasks");
+const Users = require('../src/db/user')
 
 router.post("/tasks", async (req, res) => {
     console.log(req.body);
