@@ -3,7 +3,8 @@ const { set } = require("mongoose");
 const Users = require("../src/db/user");
 const Tasks = require("./db/tasks");
 const userRouter = require('../routers/user')
-const taskRouter = require('../routers/tasks')
+const taskRouter = require('../routers/tasks');
+const { compareSync } = require("bcryptjs");
 
 require("./mongoose/mong"); //this is just to make a connetion to database
 require("./mongoose/tasksdb"); // this is just to make a connection with database tasks
@@ -105,33 +106,49 @@ app.listen(port, () => {
 });
 
 
-const bcrypt = require('bcryptjs')
+// const bcrypt = require('bcryptjs')
 
-const myFunction = async( )=> {
+// const myFunction = async( )=> {
   
-  try{
-    const password = 'password'
-  const hashPassword = await bcrypt.hash(password , 8);
-  console.log(hashPassword)
-  }
-  catch(e) {
-    console.log("error is : " , e)
-  }
+//   try{
+//     const password = 'password'
+//   const hashPassword = await bcrypt.hash(password , 8);
+//   console.log(hashPassword)
+//   }
+//   catch(e) {
+//     console.log("error is : " , e)
+//   }
   
 
-} 
+// } 
 
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 
-myFunction();
+// myFunction();
 
 
-const anotherFunction  = async()=> {
-  const token = jwt.sign({'id' : 'test'} , 'another', {expiresIn : '0 seconds'}); // in third arguments we can set the expire tiem
-  console.log("token is : ", token)
- console.log( jwt.verify(token,'another'))
-} 
-anotherFunction()
+app.all('/secerat' , (req,res,next) => {
+    res.send({
+        req : "test",
+      next : next
+    })
+})
+
+const path = require('path')
+// sending the response as an image
+app.get( '/show'  , (req,res) => {
+
+  res.sendFile(path.join(__dirname , "download.jpeg"));
+
+} ) 
+
+app.get('/checknext' ,(req,res,next)=> {
+    next( {name : 'rakesh' , age:  12});
+
+})
+
+app.disable('/test');
+app.get( '/test');
 
 
 

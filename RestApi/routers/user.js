@@ -120,14 +120,20 @@ router.delete('/users/:id' ,(req,res) => {
 
 
   router.post('/users/login' , async(req,res)=> {
-
-    try{
       const user = await Users.findByCredentials(req.body.email,req.body.password)
-      res.send(user)
+      console.log(user)
+    try{
+      
+
+      console.log("checkpoint 2")
+      const token = await user.generateAuthToken();
+      res.send(user , {token})
     }
     catch(e){
       res.status(400).send({
-        err : e
+        err : e,
+        status : 'unable to connect'
+
       })
     }
 

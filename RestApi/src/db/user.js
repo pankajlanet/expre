@@ -2,7 +2,7 @@ const { bgCyanBright } = require("chalk");
 const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt= require('bcryptjs');
-
+const jwt = require('jsonwebtoken')
 
 const userSchema = mongoose.Schema({
   name: {
@@ -32,19 +32,19 @@ const userSchema = mongoose.Schema({
   },
 })
 
-//
-userSchema.statics.findByCredentials = async (email, password) => {
-  console.log("method called")
-  const user = await Users.findOne({ email });
-  if (!user) {
-    throw new Error("unable to login");
-  }
-  const isMatch = await bcrypt.compare(password, user.password);
-  if (!isMatch) {
-    throw new Error("Unable to login");
-  }
-  return user;  
-};
+userSchema.methods.generateAuthToken = async( )=> {
+  const user = this;
+  const token  = jwt.sign( {id : user._id.toString() } , 'random text' )
+}
+
+
+userSchema.methods.generateAuthToken  = async function ( ){
+  const user = this;
+  const token = jwt.sign({_id : user._id.toString()} , "random")
+  return token
+}
+ 
+
 
 
 //must be used simple function to make bindings
